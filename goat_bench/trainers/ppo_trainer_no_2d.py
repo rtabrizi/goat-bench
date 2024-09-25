@@ -296,16 +296,17 @@ class GoatPPOTrainer(PPOTrainer):
 
                 if len(self.config.habitat_baselines.eval.video_option) > 0:
                     # TODO move normalization / channel changing out of the policy and undo it here
-                    frame = observations_to_image(
-                        {k: v[i] for k, v in vis_batch.items() if "rgb" in k},
-                        {
-                            "top_down_map": {
-                                k.split(".")[-1]: v
-                                for k, v in infos[i].items()
-                                if "top_down_map" in k
-                            }
-                        },
-                    )
+                    frame = observations_to_image({k: v[i] for k, v in vis_batch.items() if "rgb" in k}, None)
+                    # frame = observations_to_image(
+                    #     {k: v[i] for k, v in vis_batch.items() if "rgb" in k},
+                    #     {
+                    #         "top_down_map": {
+                    #             k.split(".")[-1]: v
+                    #             for k, v in infos[i].items()
+                    #             if "top_down_map" in k
+                    #         }
+                    #     },
+                    # )
                     print("Info: {}".format(infos[i].keys()))
                     if not not_done_masks[i].item():
                         # The last frame corresponds to the first frame of the next episode
@@ -350,16 +351,16 @@ class GoatPPOTrainer(PPOTrainer):
                     episode_state_copy["episode_id"] = current_episodes_info[
                         i
                     ].episode_id
-                    episode_state_copy["subtasks"] = current_episodes_info[
-                        i
-                    ].tasks
+                    # episode_state_copy["subtasks"] = current_episodes_info[
+                    #     i
+                    # ].tasks
                     episode_state_copy["success_by_subtask"] = infos[i][
                         "success.subtask_success"
                     ]
                     episode_state_copy["spl_by_subtaskl"] = infos[i][
                         "spl.spl_by_subtask"
                     ]
-                    print("episode_state_copy", current_episodes_info[i].tasks)
+                    # print("episode_state_copy", current_episodes_info[i].tasks)
                     episode_state_copy["actions"] = saved_actions[i]
                     episode_metrics.append(episode_state_copy)
 
